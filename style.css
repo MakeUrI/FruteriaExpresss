@@ -495,3 +495,21 @@ footer {
     justify-self: start;
   }
 }
+
+.login-menu { position: relative; display: inline-block; }
+.login-menu .login-dropdown { position: absolute; right: 0; top: calc(100% + 6px); background: rgba(255, 253, 253, 0.98); border-radius: 0.5rem; box-shadow: 0 6px 18px rgba(2,6,23,0.08); list-style: none; padding: 0.35rem; margin: 0; min-width: 150px; z-index: 30; }
+.login-menu .login-dropdown li { margin: 0; }
+.login-menu .login-dropdown button { width: 100%; text-align: left; padding: 0.45rem 0.6rem; background: transparent; border: none; color: #064e3b; font-weight: 700; border-radius: 0.25rem; }
+.login-menu .login-dropdown button:hover { background: rgba(0,0,0,0.04); }
+.login-dropdown { position: absolute; right: 0; top: calc(100% + 6px); background: rgba(255,255,255,0.98); border-radius: 0.5rem; box-shadow: 0 6px 18px rgba(2,6,23,0.08); list-style: none; padding: 0.35rem; margin: 0; min-width: 150px; z-index: 30; }
+.login-dropdown li { margin: 0; }
+.login-dropdown button { width: 100%; text-align: left; padding: 0.45rem 0.6rem; background: transparent; border: none; color: #064e3b; font-weight: 700; border-radius: 0.25rem; }
+.login-dropdown button:hover { background: rgba(0,0,0,0.04); }
+
+.modal-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(2,6,23,0.45); z-index: 1000; }
+.modal-overlay.oculto { display: none; }
+.modal { background: #ffffff; padding: 1rem; border-radius: 0.75rem; width: 320px; max-width: calc(100% - 2rem); box-shadow: 0 10px 30px rgba(2,6,23,0.2); }
+.modal h3 { margin: 0 0 0.5rem 0; color: #063f2a; }
+.modal form { display: flex; flex-direction: column; gap: 0.5rem; }
+.modal label { font-size: 0.85rem; color: #334155; }
+.modal input[type="text"], .modal input[type="email"], .modal input[type="password"] { padding: 0.45rem 0.5rem; border: 1px solid #d1d5db; border-radius: 0.35rem; }

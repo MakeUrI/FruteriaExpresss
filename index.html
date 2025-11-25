@@ -19,10 +19,13 @@
         </div>
 
         <nav class="main-nav" aria-label="Navegación principal">
-          <a href="#" class="nav-link">Inicio</a>
+          <a href="#" class="nav-link" id="inicioLink">Inicio</a>
           <a href="#productos" class="nav-link">Productos</a>
           <a href="administracion.html" class="nav-link">Vendedor</a>
           <a href="carrito.html" class="nav-link nav-carrito">🛒</a>
+          <ul class="login-dropdown" id="loginDropdown" hidden>
+            <li><button class="nav-link" id="abrirLogin">Iniciar sesión</button></li>
+          </ul>
         </nav>
       </div>
     </header>
@@ -139,8 +142,27 @@
       Producto añadido al carrito.
     </div>
 
+    <div class="modal-overlay oculto" id="loginModal" aria-hidden="true">
+      <div class="modal">
+        <h3>Iniciar sesión</h3>
+        <form id="formLogin">
+          <label for="nombreLogin">Nombre</label>
+          <input type="text" id="nombreLogin" name="nombre" required>
+          <label for="correoLogin">Correo (opcional)</label>
+          <input type="email" id="correoLogin" name="correo">
+          <label for="passLogin">Contraseña</label>
+          <input type="password" id="passLogin" name="password" required>
+          <div style="display:flex;gap:0.5rem;margin-top:0.75rem;justify-content:flex-end">
+            <button type="button" class="boton-volver" id="cancelLogin">Cancelar</button>
+            <button type="submit" class="boton-comprar">Entrar</button>
+          </div>
+          <p id="loginMensaje" style="color:#ef4444;margin:0.5rem 0 0 0;display:none"></p>
+        </form>
+      </div>
+    </div>
+
   </body>
-  
+
   <script>
     // Cargar precios guardados en localStorage al inicio
     function cargarPreciosDesdeStorage() {
@@ -216,6 +238,49 @@
     }
 
     // Ejecutar carga al abrir la página
-    window.addEventListener('DOMContentLoaded', cargarPreciosDesdeStorage);
+    window.addEventListener('DOMContentLoaded', function(){
+      cargarPreciosDesdeStorage();
+      const usuariosPermitidos = ['uriel','marisol','estrella','ivan','pruebas'];
+      const inicioLink = document.getElementById('inicioLink');
+      const loginDropdown = document.getElementById('loginDropdown');
+      const abrirLogin = document.getElementById('abrirLogin');
+      const loginModal = document.getElementById('loginModal');
+      const cancelLogin = document.getElementById('cancelLogin');
+      const formLogin = document.getElementById('formLogin');
+      const loginMensaje = document.getElementById('loginMensaje');
+      if (inicioLink) {
+        inicioLink.addEventListener('click', (ev)=>{
+          ev.preventDefault();
+          if (!loginDropdown) return;
+          loginDropdown.hidden = !loginDropdown.hidden;
+        });
+      }
+      if (abrirLogin) {
+        abrirLogin.addEventListener('click', ()=>{
+          if (loginDropdown) loginDropdown.hidden = true;
+          if (loginModal) { loginModal.classList.remove('oculto'); loginModal.setAttribute('aria-hidden','false'); }
+        });
+      }
+      if (cancelLogin) {
+        cancelLogin.addEventListener('click', ()=>{
+          if (loginModal) { loginModal.classList.add('oculto'); loginModal.setAttribute('aria-hidden','true'); }
+          if (loginMensaje) loginMensaje.style.display = 'none';
+          if (formLogin) formLogin.reset();
+        });
+      }
+      if (formLogin) {
+        formLogin.addEventListener('submit', (e)=>{
+          e.preventDefault();
+          const nombre = (document.getElementById('nombreLogin').value || '').trim().toLowerCase();
+          const pass = document.getElementById('passLogin').value || '';
+          if (!usuariosPermitidos.includes(nombre)) { loginMensaje.textContent = 'Usuario no reconocido'; loginMensaje.style.display = 'block'; return; }
+          if (!pass) { loginMensaje.textContent = 'Contraseña requerida'; loginMensaje.style.display = 'block'; return; }
+          loginMensaje.style.display = 'none';
+          if (loginModal) { loginModal.classList.add('oculto'); loginModal.setAttribute('aria-hidden','true'); }
+          mostrarNotificacion('Inicio de sesión correcto: ' + nombre);
+          formLogin.reset();
+        });
+      }
+    });
   </script>
 </html>
