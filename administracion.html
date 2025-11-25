@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fruteria Márquez - Vendedor</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- movido a style-administracion.css para mejor orden -->
+  <link rel="stylesheet" href="style-administracion.css">
+  <!-- estilos del login movidos a style-administracion.css -->
+</head>
+<body>
+  <header>
+    <h1>Fruteria Express</h1>
+  </header>
+
+  <!-- Pantalla de login -->
+  <div id="loginOverlay" class="login-overlay" aria-hidden="false" role="dialog" aria-label="Login administrador">
+    <div class="login-card" role="document">
+      <h2>Acceso Vendedor</h2>
+      <p>Ingrese su usuario y contraseña. El correo es opcional.</p>
+
+      <div class="login-row">
+        <label for="inputUsuario" class="sr-only">Usuario</label>
+        <input id="inputUsuario" type="text" placeholder="Usuario" autocomplete="username" />
+      </div>
+
+      <div class="login-row">
+        <label for="inputEmail" class="sr-only">Correo (opcional)</label>
+        <input id="inputEmail" type="email" placeholder="Correo" autocomplete="email" />
+      </div>
+
+      <div class="login-row">
+        <label for="inputContrasena" class="sr-only">Contraseña</label>
+        <input id="inputContrasena" type="password" placeholder="Contraseña" autocomplete="current-password" />
+      </div>
+
+      <div class="login-msg" id="loginMsg" aria-live="polite"></div>
+
+      <div class="login-actions">
+        <button class="btn-login" id="btnLogin">Entrar</button>
+        <button class="btn-cancel" id="btnReset">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="panel" id="panelProductos" hidden>
+      <h2 style="margin-top:0">Modificar Precios de Productos</h2>
+      <!-- Los productos se generan por JS -->
+      <div id="listaProductos"></div>
+
+      <div class="acciones">
+        <button class="btn btn-secondary" onclick="guardarYCambiar()">Guardar Cambios y Volver al Comprador</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Derechos Reservados &copy; 2025</p>
+  </footer>
+
+  <script>
+    try {
+      if (document.referrer) {
+        const ref = new URL(document.referrer);
+        if (ref.pathname.includes('index')) {
+          localStorage.removeItem('usuario_admin');
+          localStorage.removeItem('usuario_admin_email');
+        }
+      }
+    } catch (e) {
+    }
+
+    // usuarios permitidos y regla: contraseña == nombre (minúsculas)
+    const usuariosPermitidos = ['ivan','uriel','estrella','marisol','pruevas'];
+
+    // Referencias DOM login
+    const overlay = document.getElementById('loginOverlay');
+    const inpUser = document.getElementById('inputUsuario');
+    const inpEmail = document.getElementById('inputEmail');
+    const inpPass = document.getElementById('inputContrasena');
+    const msg = document.getElementById('loginMsg');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnReset = document.getElementById('btnReset');
+    const panel = document.getElementById('panelProductos');
+
+    // Comportamiento de los botones
+    btnLogin.addEventListener('click', intentarLogin);
+    btnReset.addEventListener('click', () => {
+      inpUser.value = '';
+      inpEmail.value = '';
+      inpPass.value = '';
+      msg.textContent = '';
+      inpUser.focus();
+    });
+
+    function intentarLogin() {
+      const usuario = (inpUser.value || '').trim().toLowerCase();
+      const contr = (inpPass.value || '').trim();
+      if (!usuario) {
+        msg.textContent = 'Ingrese un usuario.';
+        return;
+      }
+      if (!usuariosPermitidos.includes(usuario)) {
+        msg.textContent = 'Usuario no autorizado.';
+        return;
+      }
+      // regla: la contraseña debe ser el mismo nombre (ignorando mayúsculas)
+      if (contr.toLowerCase() !== usuario) {
+        msg.textContent = 'Contraseña incorrecta.';
+        return;
+      }
+
+      // Éxito: almacenar info mínima en localStorage para sesión
+      localStorage.setItem('usuario_admin', usuario);
+      // opcional: guardar correo si lo ingresaron
+      const correo = (inpEmail.value || '').trim();
+      if (correo) localStorage.setItem('usuario_admin_email', correo);
+
+      mostrarPanelAdmin();
+    }
+
+    function mostrarPanelAdmin() {
+      overlay.setAttribute('aria-hidden','true');
+      overlay.style.display = 'none';
+      panel.hidden = false;
+      // inicializar interface de administración
+      crearInterface();
+    }
+
+    // Si ya hay sesión guardada, omitir login
+    if (localStorage.getItem('usuario_admin')) {
+      overlay.style.display = 'none';
+      panel.hidden = false;
+      // cargar interface tras DOM listo
+      window.addEventListener('DOMContentLoaded', crearInterface);
+    } else {
+      // enfoque en usuario al cargar
+      window.addEventListener('DOMContentLoaded', () => inpUser.focus());
+    }
+
+    // Lista de productos (la misma que antes)
+    const productos = [
+      { key: 'platanos', label: 'Plátanos', defecto: 60 },
+      { key: 'manzanas', label: 'Manzanas', defecto: 14.99 },
+      { key: 'peras', label: 'Peras', defecto: 12.99 },
+      { key: 'sandias', label: 'Sandías', defecto: 30 }
+    ];
+
+    function crearInterface() {
+      const cont = document.getElementById('listaProductos');
+      cont.innerHTML = '';
+      productos.forEach(p => {
+        const precioGuardado = localStorage.getItem(`precio_${p.key}`);
+        const value = precioGuardado !== null ? precioGuardado : p.defecto;
+        const div = document.createElement('div');
+        div.className = 'producto';
+        div.innerHTML = `
+          <div>
+            <div class="label">${p.label}</div>
+            <div style="font-size:0.9rem;color:#6b7280">Clave: ${p.key}</div>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <input type="number" step="0.01" id="input_${p.key}" value="${value}">
+            <button class="btn" onclick="guardarPrecio('${p.key}')">Guardar</button>
+          </div>
+        `;
+        cont.appendChild(div);
+      });
+    }
+
+    function guardarPrecio(key) {
+      const input = document.getElementById(`input_${key}`);
+      const val = parseFloat(input.value);
+      if (!isNaN(val)) {
+        localStorage.setItem(`precio_${key}`, val.toFixed(2));
+        alert('Precio guardado para ' + key);
+      } else {
+        alert('Ingresa un precio válido.');
+      }
+    }
+
+    function guardarYCambiar() {
+      productos.forEach(p => {
+        const input = document.getElementById(`input_${p.key}`);
+        const val = parseFloat(input.value);
+        if (!isNaN(val)) {
+          localStorage.setItem(`precio_${p.key}`, val.toFixed(2));
+        }
+      });
+      // redirigir a la página del comprador (archivo principal)
+      window.location.href = 'index.html';
+    }
+
+    // permitir logout rápido (console) - opcional
+    function logoutAdmin() {
+      localStorage.removeItem('usuario_admin');
+      localStorage.removeItem('usuario_admin_email');
+      location.reload();
+    }
+  </script>
+</body>
+</html>

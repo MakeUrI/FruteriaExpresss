@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header-carrito">
+    <h1>Carrito de Compras</h1>
+  </header>
+
+  <main>
+    <div class="contenedor">
+      <h2>Tus Productos</h2>
+      <div id="lista-carrito"></div>
+
+      <!-- Botón para volver al Index -->
+      <div class="centro">
+        <button class="boton-volver" onclick="window.location.href='index.php'">
+          Volver a la tienda
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Derechos Reservados &copy; 2025</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      mostrarCarrito();
+    });
+
+    function mostrarCarrito() {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      const cont = document.getElementById('lista-carrito');
+      cont.innerHTML = '';
+
+      carrito.forEach((producto, index) => {
+        let productoElemento = document.createElement('div');
+        productoElemento.classList.add('producto-carrito');
+
+        productoElemento.innerHTML = `
+          <div>
+            <h3>${producto.key}</h3>
+            <p class="precio">$${(producto.precio * producto.cantidad).toFixed(2)}</p>
+            <p>Cantidad: <span class="cantidad">${producto.cantidad}</span></p>
+          </div>
+          <button class="boton-eliminar" onclick="eliminarDelCarrito(${index})">Eliminar</button>
+        `;
+
+        cont.appendChild(productoElemento);
+      });
+    }
+
+    function eliminarDelCarrito(index) {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      carrito.splice(index, 1); // Eliminar el producto del array
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      mostrarCarrito(); // Actualizar la vista del carrito
+    }
+  </script>
+</body>
+</html>

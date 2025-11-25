@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruteria Márquez - Comprador</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand">
+          <img src="Imagenes/logo.png" alt="Frutería Márquez" class="logo">
+          <div class="titles">
+            <h1>Frutería Express</h1>
+            <p class="tagline">Frutas frescas y naturales por mayoreo</p>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Navegación principal">
+          <a href="#" class="nav-link">Inicio</a>
+          <a href="#productos" class="nav-link">Productos</a>
+          <a href="administracion.html" class="nav-link">Vendedor</a>
+          <a href="carrito.html" class="nav-link nav-carrito">🛒</a>
+        </nav>
+      </div>
+    </header>
+  
+    <!-- Contenido Principal -->
+    <main>
+      <!-- Botón para ver el carrito -->
+      <div class="boton-carrito-fijo">
+        <button class="boton-carrito" onclick="window.location.href='carrito.html'">
+          🛒 Ver Carrito
+        </button>
+      </div>
+  
+      <!-- Contenedor de productos -->
+      <div class="contenedor-productos" id="productos">
+        <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:1rem;">Productos disponibles</h2>
+  
+        <!-- Lista de productos -->
+        <div class="lista-productos"> 
+          <!-- Producto: Plátanos -->
+          <div class="tarjeta-producto" data-nombre="Plátanos">
+            <img src="Imagenes/banane-large.jpg" alt="Plátanos"> 
+            <h3>Plátanos</h3>
+            <p>$<span id="precio_platanos" data-key="platanos">60</span> kg</p>
+            <input type="number" id="cantidad_platanos" data-key="platanos" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('platanos')">
+              Comprar
+            </button>
+          </div>
+
+          <!-- Producto: Manzanas -->
+          <div class="tarjeta-producto" data-nombre="Manzanas">
+            <img src="Imagenes/manzanas.jpeg" alt="Manzanas"> 
+            <h3>Manzanas</h3>
+            <p>$<span id="precio_manzanas" data-key="manzanas">14.99</span> kg</p> <!-- Added 'kg' -->
+            <input type="number" id="cantidad_manzanas" data-key="manzanas" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('manzanas')">
+              Comprar
+            </button>
+          </div>
+
+          <!-- Producto: Peras -->
+          <div class="tarjeta-producto" data-nombre="Peras">
+            <img src="Imagenes/Pera_3.jpg" alt="Peras"> 
+            <h3>Peras</h3>
+            <p>$<span id="precio_peras" data-key="peras">12.99</span></p>
+            <input type="number" id="cantidad_peras" data-key="peras" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('peras')">
+              Comprar
+            </button>
+          </div>
+
+          <!-- Producto: Sandías -->
+          <div class="tarjeta-producto" data-nombre="Sandías">
+            <img src="Imagenes/sandia.jpg" alt="Sandías">
+            <h3>Sandías</h3>
+            <p>$<span id="precio_sandias" data-key="sandias">30</span> kg</p>
+            <input type="number" id="cantidad_sandias" data-key="sandias" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('sandias')">
+              Comprar
+            </button>
+          </div>
+
+          <!--producto guayaba-->
+          <div class="tarjeta-producto" data-nombre="guayaba">
+            <img src="Imagenes/guayabas.jpeg" alt="guayabas">
+            <h3>guayaba</h3>
+            <p>$ <span id="precio_guayaba" data-key="guayaba" min="1" value="1">50</span></p>
+            <input type="number" id="cantidad_guayaba" data-key="guayaba" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('guayaba')">
+              Comprar
+            </button>
+          </div>
+
+          <!--producto melon-->
+          <div class="tarjeta-producto" data-nombre="melon">
+            <img src="Imagenes/melon.jpg" alt="melon">
+            <h3>melon</h3>
+            <p>$ <span id="precio_melon" data-key="melon" min="1" value="1">25</span></p>
+            <input type="number" id="cantidad_melon" data-key="melon" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('melon')">
+              Comprar
+            </button>
+          </div>
+
+          <!--producto piña-->
+          <div class="tarjeta-producto" data-nombre="piña">
+            <img src="Imagenes/piña.jpg" alt="piña">
+            <h3>piña</h3>
+            <p>$ <span id="precio_piña" data-key="piña" min="1" value="1">45</span></p>
+            <input type="number" id="cantidad_piña" data-key="piña" min="1" value="1">
+            <button class="boton-comprar" onclick="añadirAlCarrito('piña')">
+              Comprar
+            </button>
+        </div> <!-- Fin lista de productos -->
+  
+        <!-- Botón para ir a la página del vendedor -->
+        <div style="text-align:center;margin-top:1.5rem;">
+          <button class="boton-vendedor" onclick="window.location.href='administracion.html'">
+            Página del Vendedor
+          </button>
+        </div>
+  
+      </div> <!-- Fin contenedor de productos -->
+    </main>
+  
+    <!-- Pie de Página -->
+    <footer>
+      <p>Derechos Reservados &copy; 2025</p>
+    </footer>
+
+    <!-- Notificación -->
+    <div id="aviso" class="oculto" role="status" aria-live="polite">
+      Producto añadido al carrito.
+    </div>
+
+  </body>
+  
+  <script>
+    // Cargar precios guardados en localStorage al inicio
+    function cargarPreciosDesdeStorage() {
+      document.querySelectorAll('[data-key]').forEach(el => {
+        // solo interesa el span que muestra el precio (no inputs de cantidad)
+        if (el.tagName.toLowerCase() === 'span') {
+          const key = el.getAttribute('data-key');
+          const valor = localStorage.getItem(`precio_${key}`);
+          if (valor !== null) {
+            el.innerText = parseFloat(valor);
+          }
+        }
+      });
+    }
+
+    function añadirAlCarrito(key) {
+      // obtener precio y cantidad usando data-key
+      let precio = getPrecio(key);
+      let cantidad = getCantidad(key);
+
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+  
+      // Verificar si el producto ya existe en el carrito
+      let productoExistente = carrito.find(item => item.key === key);
+      
+      if (productoExistente) {
+        productoExistente.cantidad += cantidad; // Sumar cantidad si ya existe
+      } else {
+        carrito.push({ key, precio, cantidad });
+      }
+  
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      // Mostrar la notificación
+      mostrarNotificacion(`${cantidad} ${key}(s) agregado(s) al carrito.`);
+    }
+
+    // variable para controlar el timeout y evitar superposiciones
+    let avisoTimeout = null;
+
+    function mostrarNotificacion(mensaje) {
+      const aviso = document.getElementById('aviso');
+      // texto dinámico
+      aviso.innerText = mensaje;
+
+      // limpiar timeout anterior si existe
+      if (avisoTimeout) {
+        clearTimeout(avisoTimeout);
+        avisoTimeout = null;
+      }
+
+      // mostrar aviso (quita la clase oculto)
+      aviso.classList.remove('oculto');
+
+      // ocultar la notificación después de 3 segundos
+      avisoTimeout = setTimeout(() => {
+        aviso.classList.add('oculto');
+        avisoTimeout = null;
+      }, 3000); // 3000 ms = 3 segundos
+    }
+  
+    function getPrecio(key) {
+      const el = document.querySelector(`[data-key="${key}"]`);
+      // si el span existe y tiene texto, usarlo; si hay precio en storage, usar storage
+      const almacen = localStorage.getItem(`precio_${key}`);
+      if (almacen !== null) return parseFloat(almacen);
+      return parseFloat(el ? el.innerText : '0');
+    }
+  
+    function getCantidad(key) {
+      const el = document.querySelector(`input[data-key="${key}"]`);
+      return parseInt(el ? el.value : '1') || 1;
+    }
+
+    // Ejecutar carga al abrir la página
+    window.addEventListener('DOMContentLoaded', cargarPreciosDesdeStorage);
+  </script>
+</html>
